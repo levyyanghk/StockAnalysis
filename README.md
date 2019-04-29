@@ -16,7 +16,9 @@ Date of disclosure, Date of calculation ( notice here data of disclosure is norm
 Can be calculate with two week’s data:
 •	Short positions % change over the week 
 •	Net long/short amount of share change over the week 
-Hong Kong short selling Exchange disclosure:
+```
+### Hong Kong short selling Exchange disclosure:
+```
 The exchange published aggregated reportable short positions of specified shares as of each Friday market close for short sell eligible stocks (publication on a weekly basis, if Friday is a bank holiday, then data on previous trading date will be used)
 Information contained in the disclosure:
 Direct : 
