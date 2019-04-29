@@ -9,6 +9,12 @@ import org.jsoup.Jsoup;
 
 
 public class StockDataDownload {
+	/**
+	 * @param httpUrl
+	 * @param savePath
+	 * @param fileName
+	 * @return
+	 */
 	public static boolean HttpDownloadFile(String httpUrl, String savePath, String fileName){
 		int bytesum = 0;
         int byteread = 0;
@@ -52,6 +58,12 @@ public class StockDataDownload {
         }
     }
 
+	/**
+	 * @param url: HTTP address for the website
+	 * @param savePath: The path of the outfile 
+	 * @param fileName:
+	 * @return
+	 */
 	public static boolean HttpDownloadPage(String url, String savePath, String fileName){
 		try {
 

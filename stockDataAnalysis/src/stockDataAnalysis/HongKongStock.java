@@ -8,13 +8,15 @@ public class HongKongStock implements IGetStockData {
 	public final static String baseUrl =  "https://www.sfc.hk/web/EN/pdf/spr/";
 
 
+	/* (non-Javadoc)
+	 * @see stockDataAnalysis.IGetStockData#getShortPositions(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	//HongKong Market only provide the data on every Friday
 	//If the date is not Friday, this function will return the data of last friday
 	
 	public boolean getShortPositions(String date, String filePath, String fileName) {
 	
-
 		
 		//Get Year, Month and Day
 		int year  = Integer.parseInt(date.subSequence(0, 4).toString());
@@ -67,10 +69,7 @@ public class HongKongStock implements IGetStockData {
 		}
 		
 		return true;
-		
-		
 	
-
 	}
 
 }

@@ -20,6 +20,9 @@ public class JapanStock implements IGetStockData {
 	public static final String jpx_short_archived_base = "/english/markets/public/short-selling/";
 	public String jpx_short_archived_url;
 
+	/* (non-Javadoc)
+	 * @see stockDataAnalysis.IGetStockData#getShortPositions(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean getShortPositions(String date, String filePath, String fileName) {
 		String urlBase;
@@ -49,10 +52,13 @@ public class JapanStock implements IGetStockData {
 		return true;
 	}
 	
-	//Get the time difference in month between input date to current Japan local time
-	//Input: YYYYMMDD, it should be Japan local time
-	//Return: date difference in month, the value will be -1 if it is bigger than 12 or input date is later than
-	//current time.
+
+	/**
+	 * Get the time difference in month between input date to current Japan local time
+	 * @param date : format should be "yyyymmdd". it should be Japan local time
+	 * @return :  date difference in month, the value will be -1 if it is bigger than 12 or input date is later than
+	 * current time.
+	 */
 	public int getDateDifference(String date) {
 		//Get current Japan local time
 		ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Tokyo"));
@@ -83,6 +89,10 @@ public class JapanStock implements IGetStockData {
 		
 	}
 	
+	/**
+	 * @param date. Format should be "yyyymmdd"
+	 * @return . URL of the stock data
+	 */
 	public String getStockBaseUrl(String date) {
 		int diff = getDateDifference(date);
 		String day;
@@ -106,11 +116,14 @@ public class JapanStock implements IGetStockData {
 		System.out.println("URL is: " + url);
 		return url;
 	}
-	//Parse the webpage download from https://www.jpx.co.jp
-	// Input: webpage's path and name, which day's date will be returned
-	// Date's format is "YYYYMMDD", it should be Japan local time
-	// Output: URL of specified day's stock short position list
-	
+
+	/**
+	 * Parse the webpage download from https://www.jpx.co.jp
+	 * @param filePath ： webpage's path
+	 * @param fileName ： webpage's name
+	 * @param date: format is "YYYYMMDD", it should be Japan local time
+	 * @return
+	 */
 	public String GetShortPositionUrl(String filePath, String fileName, String date){
 		ArrayList<String> list=null;
 	

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"stockDataAnalysis","l":"HongKongStock"},{"p":"stockDataAnalysis","l":"IGetStockData"},{"p":"stockDataAnalysis","l":"JapanStock"},{"p":"stockDataAnalysis","l":"stockDataAnalysis"},{"p":"stockDataAnalysis","l":"StockDataDownload"}]
