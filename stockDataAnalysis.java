@@ -1,7 +1,10 @@
 package stockDataAnalysis;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class stockDataAnalysis {
 
@@ -29,7 +32,28 @@ public class stockDataAnalysis {
 		FileName = date + "Short_Position_Reporting_Aggregated_Data_" + date + ".csv";
 		HongKong.getShortPositions(date, FilePath, FileName);
 		
-
+		// Take the input from the excel file. 
+		// To do: Excel to CSV conversion is needed. 
+		FileReaderJP frJP = new FileReaderJP(); // Read file for Japan and store data in an ArrayMap
+		FileReaderHK frHK = new FileReaderHK(); // Read file for Hong Kong and store data in an ArrayMap
+		DataCalculation da = new DataCalculation();  // Calculation of various financial data
+		
+		try {	
+			//ArrayList<StockItem> resJP = frJP.readFile("20190426_Short_Positions.csv");
+			ArrayList<StockItem> resHK = frHK.readFile1("Short_Position_Reporting_Aggregated_Data_20190418.csv");
+			ArrayList<StockItem> resHKOut = frHK.readFile2("HK_outstanding_shares.csv");
+			
+			// System.out.println(res_JP);
+			// To do: Create a method for calculating short ratio for HK i.e. da.getShortRatio(fr_HK); 
+		 } 
+		
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
