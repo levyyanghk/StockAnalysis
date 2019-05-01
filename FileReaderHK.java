@@ -35,9 +35,10 @@ public class FileReaderHK {
 			//System.out.println(stockName);
 			int shortQty = Integer.parseInt(parts[3]);
 			//System.out.println(shortQty);
+			double outShares = 0;
 			
-			StockItem item = new StockItem(date, stockCode, stockName, 
-					 shortQty);
+			StockItem item = new StockItem(date, stockCode, stockName,
+					shortQty, outShares);
 			
 			result.add(item);
 		}
@@ -58,7 +59,7 @@ public class FileReaderHK {
 			line = in.nextLine();
 			
 			String[] parts = line.split(",");
-			System.out.println(parts);
+			//System.out.println(parts);
 			String stockCode = parts[0];
 			//System.out.println(stockCode);
 			String stockName = parts[1];

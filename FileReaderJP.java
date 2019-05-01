@@ -38,7 +38,7 @@ public class FileReaderJP {
 			
 			String stockCode = parts[2];
 			String stockName = parts[4];
-			String shortRatio = parts[10];
+			double shortRatio = Double.parseDouble(parts[10]);
 			double shortQty = 0;
 			
 			/*
