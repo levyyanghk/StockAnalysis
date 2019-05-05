@@ -14,22 +14,26 @@ public class stockDataAnalysis {
 		//Example for getting data from Japan stock market
 		IGetStockData Japan = new JapanStock();
 		
-		//Save date in current path + /JP
-		Path currentRelativePath = Paths.get("");
-		String FilePath = currentRelativePath.toAbsolutePath().toString();
-		FilePath = FilePath + "/JP";
-		String date = "20190324";
-		String FileName = date +  "_Short_Positions.xls";
-		Japan.getShortPositions(date, FilePath, FileName);
+		ArrayList <StockItem> japanStockList;
+
+		String date = "20190319";
+
+		japanStockList = Japan.getShortPositions(date);
 		
+		if (japanStockList != null) {
+			for (StockItem stockItem : japanStockList) {
+				System.out.println("date " + stockItem.date + " code " + stockItem.stockCode + " shortRatio " + stockItem.shortRatio);
+			}
+		}
+	/*	
 		//Example for getting data from HongKong stock market
 		IGetStockData HongKong = new HongKongStock();
 		FilePath = currentRelativePath.toAbsolutePath().toString();
 		FilePath = FilePath + "/HK";
 		date = "20190415";
 		FileName = date + "Short_Position_Reporting_Aggregated_Data_" + date + ".csv";
-		HongKong.getShortPositions(date, FilePath, FileName);
-		
+		HongKong.getShortPositions(date);
+	*/
 
 	}
 

@@ -13,6 +13,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+
 public class JapanStock implements IGetStockData {
 	
 	public static final String jpx_url = "https://www.jpx.co.jp";
@@ -24,32 +29,49 @@ public class JapanStock implements IGetStockData {
 	 * @see stockDataAnalysis.IGetStockData#getShortPositions(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean getShortPositions(String date, String filePath, String fileName) {
+	public ArrayList <StockItem>  getShortPositions(String date) {
 		String urlBase;
 		urlBase = getStockBaseUrl(date);
+		ArrayList <StockItem> list;
 		if (urlBase == null) {
 			System.out.println("Could not get short positions");
-			return false;
+			return null;
 		}
-		
+
 		//Save webpage in current path
 		Path currentRelativePath = Paths.get("");
 		String httpFilePath = currentRelativePath.toAbsolutePath().toString();
 		httpFilePath = httpFilePath + "/temp";
 		String httpFileName = "temp.xml";
+		String fileName = "japan.xls";
 		
 		if (StockDataDownload.HttpDownloadPage(urlBase, httpFilePath, httpFileName) == false) {
 			System.out.println("Could not get the webpage from " + urlBase);
-			return false;
+			return null;
 		}
 		
 		String url;
 		url = GetShortPositionUrl(httpFilePath, httpFileName, date);
 		if (url != null)
-			StockDataDownload.HttpDownloadFile(url, filePath, fileName);
+			StockDataDownload.HttpDownloadFile(url, httpFilePath, fileName);
 		else
-			return false;
-		return true;
+			return null;
+		
+	
+            File file = new File(httpFilePath + "/" + fileName);
+ 
+            Workbook book;
+			try {
+				book = Workbook.getWorkbook(file);
+				list = JapanStockRead(book);
+	            book.close();
+	            return list;
+			} catch (BiffException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+           
+		return null;
 	}
 	
 
@@ -107,9 +129,9 @@ public class JapanStock implements IGetStockData {
 			url = jpx_url + jpx_short_current;
 		} else {
 			if (diff < 10) {
-				day = "0" + Integer.toString(diff);
+				day = "0" + Integer.toString(diff-1); //temp solution
 			} else {
-				day = Integer.toString(diff);
+				day = Integer.toString(diff); //temp solution
 			}
 			url = jpx_url + jpx_short_archived_base + "00-archives-" + day + ".html";
 		}
@@ -173,5 +195,62 @@ public class JapanStock implements IGetStockData {
 		return link;
 		
 	}
+	
+   
+    public static ArrayList <StockItem> JapanStockRead (Workbook book) {
+        int rows;
+        //Get sheet numbers in workbook
+        int sheetNumber = book.getNumberOfSheets();
+        //Get sheet name
+        String [] sheetNameList = book.getSheetNames();
+        //Get each sheet
+        Sheet [] sheetList = book.getSheets();
+        
+        ArrayList <StockItem> japanStockList = new ArrayList <StockItem> ();
+        
+        //iterate each cell and save it in the ArrayList
+        for(int i = 0;i < sheetNumber;i++) {
+            System.out.println("############## " + sheetNameList[i] + " ##############");
+            //Get row's number in each sheet
+            rows = sheetList[i].getRows();
+            for(int j = 0;j < rows;j++) {
+                //Get each row
+                Cell [] cellList = sheetList[i].getRow(j);
+                StockItem stockItem = new StockItem();
+                if (cellList[1].getContents().contains("/") == false) {
+                	System.out.println("Skip this row" + cellList[0].getContents());
+                	continue;
+                }
+                stockItem.date = cellList[1].getContents();
+                stockItem.stockCode = cellList[2].getContents();
+                stockItem.shortRatio = Double.parseDouble(cellList[10].getContents().replaceAll("%", ""));
 
+                japanStockList.add(stockItem);
+                System.out.println("date " + stockItem.date + "code " + stockItem.stockCode + "shortRatio " + stockItem.shortRatio);
+                        
+                for (Cell cell : cellList) {
+                    System.out.print(cell.getContents() + "  ");
+                }
+                System.out.println();
+            }          
+        }
+        StockItem stockItem = new StockItem();
+        stockItem.stockCode = " ";
+        ArrayList <StockItem> finalList = new ArrayList <StockItem> ();
+        //Combine each company's stock short ratio together
+        for (StockItem item : japanStockList) {
+        	if (stockItem.stockCode.contentEquals(item.stockCode)) {
+        		stockItem.shortRatio = stockItem.shortRatio + item.shortRatio;
+        		String ratio = String.format("%.2f", stockItem.shortRatio);
+        		stockItem.shortRatio = Double.parseDouble(ratio);
+        	} else {
+        		finalList.add(stockItem);
+        		stockItem = item;
+        	}
+      
+        }
+        finalList.remove(0);
+        return finalList;
+    }
+    
 }

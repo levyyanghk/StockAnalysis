@@ -1,5 +1,5 @@
 package stockDataAnalysis;
-
+import java.util.ArrayList;
 
 public interface IGetStockData {
 
@@ -9,6 +9,6 @@ public interface IGetStockData {
 	 * @param fileName : File name for stock output data
 	 * @return
 	 */
-	public boolean getShortPositions(String date, String filePath, String fileName);
+	public ArrayList <StockItem> getShortPositions(String date);
 
 }

@@ -1,5 +1,8 @@
 package stockDataAnalysis;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -15,7 +18,7 @@ public class HongKongStock implements IGetStockData {
 	//HongKong Market only provide the data on every Friday
 	//If the date is not Friday, this function will return the data of last friday
 	
-	public boolean getShortPositions(String date, String filePath, String fileName) {
+	public ArrayList <StockItem> getShortPositions(String date) {
 	
 		
 		//Get Year, Month and Day
@@ -62,13 +65,19 @@ public class HongKongStock implements IGetStockData {
 		
 		String url = baseUrl + year + "/" + strMonth + "/" + strDay + "/"
 				     + "Short_Position_Reporting_Aggregated_Data_" + year + strMonth + strDay + ".csv";
+		
+		//Save webpage in current path
+		Path currentRelativePath = Paths.get("");
+		String filePath = currentRelativePath.toAbsolutePath().toString();
+		filePath = filePath + "/temp";
+		String fileName = "HK.csv";
 			
 		if (StockDataDownload.HttpDownloadFile(url, filePath, fileName) == false) {
 			System.out.println(url + " is not avaliable");
-			return false;
+			return null;
 		}
 		
-		return true;
+		return null;
 	
 	}
 
