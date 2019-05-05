@@ -1,10 +1,14 @@
 package stockDataAnalysis;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class HongKongStock implements IGetStockData {
 
@@ -77,8 +81,119 @@ public class HongKongStock implements IGetStockData {
 			return null;
 		}
 		
-		return null;
+		ArrayList<StockItem> stockList;
+		stockList = readFile1(filePath + "/" + fileName);
+		
+		ArrayList<StockItem> shareList;
+		
+
+		filePath = currentRelativePath.toAbsolutePath().toString();
+		fileName = filePath + "/HK/" + "HK_outstanding_shares.csv";
+		shareList = readFile2(fileName);
+		
+		return (getShortRatio(stockList, shareList));
+
 	
 	}
+	
+	// Read short outstanding file
+		public ArrayList<StockItem> readFile1(String fileName){
+			
+			ArrayList<StockItem> result = new ArrayList<>();
+			File file = new File(fileName);
+			Scanner in;
+			try {
+				in = new Scanner(file);
+			
+				in.nextLine();
+			
+				String line;
+				while (in.hasNextLine()) {
+					line = in.nextLine();
+				
+					String[] parts = line.split(",");
+					//System.out.println(parts);
+					String date = parts[0];
+					//System.out.println(date);
+					String stockCode = parts[1];
+					//System.out.println(stockCode);
+					String stockName = parts[2];
+					//System.out.println(stockName);
+					int shortQty = Integer.parseInt(parts[3]);
+					//System.out.println(shortQty);
+					double outShares = 0;
+				
+					StockItem item = new StockItem(date, stockCode, stockName,
+						shortQty, outShares);
+				
+					result.add(item);
+				}
+				in.close();
+				return result; 
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			
+		}
+		
+		// Read shares outstanding file
+		public ArrayList<StockItem> readFile2(String fileName){
+			
+			ArrayList<StockItem> result = new ArrayList<>();
+			File file = new File(fileName);
+			Scanner in;
+			try {
+				in = new Scanner(file);
+				in.nextLine();
+				String line;
+				while (in.hasNextLine()) {
+					line = in.nextLine();
+				
+					String[] parts = line.split(",");
+					//System.out.println(parts);
+					String stockCode = parts[0];
+					//System.out.println(stockCode);
+					String stockName = parts[1];
+					//System.out.println(stockName);
+					double outShares = Double.parseDouble(parts[2]);
+					//System.out.println(outShares);
+			
+					StockItem item = new StockItem(stockCode, stockName, outShares);
+				
+					result.add(item);
+				}
+				in.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return result; 
+		}
+		
+		public ArrayList <StockItem> getShortRatio(ArrayList<StockItem> stockItemsHK, ArrayList<StockItem> outShares) {
+			
+			// Create a new ArrayList that combines the 1. short position and 2. shares outstanding files 	
+			ArrayList<StockItem> updatedItems = new ArrayList<>();
+			// updatedItems consists of a series of updatedItem, which is a single line in a file
+			StockItem updatedItem = null;  
+			
+			// ArrayList of item1 indicates a single row in the HK Short Position file
+			// Add outstanding shares to item1 by creating a new ArrayList
+			// Last parameter, (item1.getShortQty() / item2.getOutShares()), is the short ratio
+			for (StockItem item1: stockItemsHK) {	
+				for (StockItem item2: outShares) {
+						if (item1.getStockCode().equals(item2.getStockCode())) {
+							updatedItem = new StockItem(item1.getDate(),item1.getStockCode(),
+							item1.getStockName(), item1.getShortQty(), item2.getOutShares(), (item1.getShortQty() / item2.getOutShares()));
+						}
+				}
+      
+				updatedItems.add(updatedItem);
+			}
+
+			return updatedItems;
+		}
 
 }

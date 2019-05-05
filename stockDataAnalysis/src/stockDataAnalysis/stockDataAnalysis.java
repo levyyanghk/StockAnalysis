@@ -3,8 +3,11 @@ package stockDataAnalysis;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class stockDataAnalysis {
+	
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -17,23 +20,44 @@ public class stockDataAnalysis {
 		ArrayList <StockItem> japanStockList;
 
 		String date = "20190319";
-
+/*
 		japanStockList = Japan.getShortPositions(date);
+
+		//Sort the stock list based on short ratio
+        ComparaShortRatio com = new ComparaShortRatio();
+        Collections.sort(japanStockList,com);
+
 		
 		if (japanStockList != null) {
 			for (StockItem stockItem : japanStockList) {
 				System.out.println("date " + stockItem.date + " code " + stockItem.stockCode + " shortRatio " + stockItem.shortRatio);
 			}
 		}
-	/*	
+	*/
+	
 		//Example for getting data from HongKong stock market
 		IGetStockData HongKong = new HongKongStock();
-		FilePath = currentRelativePath.toAbsolutePath().toString();
-		FilePath = FilePath + "/HK";
+		ArrayList <StockItem> hkStockList;
+
 		date = "20190415";
-		FileName = date + "Short_Position_Reporting_Aggregated_Data_" + date + ".csv";
-		HongKong.getShortPositions(date);
-	*/
+		
+		hkStockList = HongKong.getShortPositions(date);
+		
+        ComparaShortRatio com = new ComparaShortRatio();
+        Collections.sort(hkStockList,com);
+        
+        for (StockItem item:hkStockList) {
+        	String ratio = String.format("%.2f", item.shortRatio);
+        	item.shortRatio = Double.parseDouble(ratio);
+        }
+
+        
+		if (hkStockList != null) {
+			for (StockItem stockItem : hkStockList) {
+				System.out.println("date " + stockItem.date + " code " + stockItem.stockCode + " shortRatio " + stockItem.shortRatio);
+			}
+		}
+	
 
 	}
 
