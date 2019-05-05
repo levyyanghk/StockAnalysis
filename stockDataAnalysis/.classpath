@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/haipeng/eclipse-workspace/github/stockAnalysis/StockAnalysis/stockDataAnalysis/libs/jsoup-1.11.3.jar"/>
-	<classpathentry kind="lib" path="/Users/haipeng/eclipse-workspace/github/stockAnalysis/StockAnalysis/stockDataAnalysis/libs/jxl-2.6.12.jar"/>
+	<classpathentry kind="lib" path="libs/jsoup-1.11.3.jar"/>
+	<classpathentry kind="lib" path="libs/jxl-2.6.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

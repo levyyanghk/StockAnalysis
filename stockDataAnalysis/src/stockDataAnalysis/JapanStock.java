@@ -210,7 +210,7 @@ public class JapanStock implements IGetStockData {
         
         //iterate each cell and save it in the ArrayList
         for(int i = 0;i < sheetNumber;i++) {
-            System.out.println("############## " + sheetNameList[i] + " ##############");
+      //      System.out.println("############## " + sheetNameList[i] + " ##############");
             //Get row's number in each sheet
             rows = sheetList[i].getRows();
             for(int j = 0;j < rows;j++) {
@@ -218,7 +218,7 @@ public class JapanStock implements IGetStockData {
                 Cell [] cellList = sheetList[i].getRow(j);
                 StockItem stockItem = new StockItem();
                 if (cellList[1].getContents().contains("/") == false) {
-                	System.out.println("Skip this row" + cellList[0].getContents());
+      //          	System.out.println("Skip this row" + cellList[0].getContents());
                 	continue;
                 }
                 stockItem.date = cellList[1].getContents();
@@ -226,13 +226,16 @@ public class JapanStock implements IGetStockData {
                 stockItem.shortRatio = Double.parseDouble(cellList[10].getContents().replaceAll("%", ""));
 
                 japanStockList.add(stockItem);
+     /*
                 System.out.println("date " + stockItem.date + "code " + stockItem.stockCode + "shortRatio " + stockItem.shortRatio);
                         
                 for (Cell cell : cellList) {
                     System.out.print(cell.getContents() + "  ");
                 }
                 System.out.println();
-            }          
+     */ 
+            }  
+       
         }
         StockItem stockItem = new StockItem();
         stockItem.stockCode = " ";
